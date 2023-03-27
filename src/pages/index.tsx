@@ -6,9 +6,9 @@ import { SignIn, SignInButton, useUser, SignOutButton } from "@clerk/nextjs";
 import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
-
   const user = useUser();
+
+  const { data } = api.posts.getAll.useQuery();
 
   return (
     <>
@@ -18,20 +18,21 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        {!user.isSignedIn && 
+        {!user.isSignedIn && (
           <SignInButton mode="modal">
-            <button className="btn">
-              Sign in
-            </button>
+            <button className="bg-teal-400 text-slate-100">Sign in</button>
           </SignInButton>
-        }
-        {!!user.isSignedIn && 
+        )}
+        {!!user.isSignedIn && (
           <SignOutButton>
-            <button className="btn">
-              Sign out
-            </button>
+            <button className="bg-teal-400 text-slate-100">Sign out</button>
           </SignOutButton>
-        }
+        )}
+        <div>
+          {data?.map((post) => (
+            <div key={post.id}>{post.content}</div>
+          ))}
+        </div>
       </main>
     </>
   );
