@@ -22,7 +22,7 @@ export const PostView = (props: PostWithUser) => {
       <div className="flex flex-col gap-2">
         <div className="flex gap-2">
           <Link href={`@${author.username}`}>
-            <span className="font-bold text-slate-200">{`@${author.username}`}</span>
+            <span>{`@${author.username}`}</span>
           </Link>
           <span className="font-thin">{dayjs(post.createdAt).fromNow()}</span>
         </div>

@@ -1,4 +1,4 @@
-import { GetStaticProps, type NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 
 import { api } from "~/utils/api";
@@ -11,6 +11,7 @@ import { LoadingPage } from "~/components/loading";
 import { PageLayout } from "~/components/pageLayout";
 import Image from "next/image";
 import { PostView } from "~/components/postView";
+import Link from "next/link";
 
 // type PageProps = InferGetStaticPropsType<typeof getStaticProps>;
 
@@ -42,10 +43,19 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
   return (
     <>
       <Head>
-        <title>{`Chirp | @${data.username}`}</title>
+        <title>{`Chirp | @${data.username ?? "username"}`}</title>
       </Head>
       <PageLayout>
         <div className="relative h-48 bg-slate-800">
+          <div className="p-4">
+            <Link
+              href="/"
+              className="flex h-10 w-10 items-center justify-center rounded bg-slate-400"
+            >
+              🕊️
+            </Link>
+          </div>
+
           <Image
             src={data.profilePicture}
             width={128}

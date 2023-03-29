@@ -1,20 +1,20 @@
 import { type NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
+
 import { SignInButton, useUser, SignOutButton } from "@clerk/nextjs";
 
 import { api } from "~/utils/api";
 
-import type { RouterOutputs } from "~/utils/api";
-
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import { LoadingPage, LoadingSpinner } from "~/components/loading";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import Link from "next/link";
 import { PageLayout } from "~/components/pageLayout";
 import { PostView } from "~/components/postView";
+
+import Head from "next/head";
+import Image from "next/image";
+
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 
 dayjs.extend(relativeTime);
 
@@ -38,7 +38,6 @@ const CreatePostWizard = () => {
       } else {
         toast.error("Generic error");
       }
-      // toast.error("Failed to post");
     },
   });
 
@@ -53,8 +52,6 @@ const CreatePostWizard = () => {
         width={56}
         height={56}
       />
-
-      {/* <span>{user.externalId} <br/> {user.id}</span> */}
 
       <input
         type="text"
@@ -98,7 +95,6 @@ const Feed = () => {
       {data.map((fullPost) => (
         <PostView {...fullPost} key={fullPost.post.id} />
       ))}
-      {/* <div>Hello</div> */}
     </div>
   );
 };
@@ -122,7 +118,7 @@ const Home: NextPage = () => {
         <div className="border-b border-slate-400 p-4">
           {!isSignedIn && (
             <SignInButton mode="modal">
-              <button className="rounded bg-purple-800 py-2 px-4 text-slate-100">
+              <button className="rounded bg-slate-500 py-2 px-4 text-slate-100">
                 Sign in
               </button>
             </SignInButton>
@@ -130,7 +126,7 @@ const Home: NextPage = () => {
           {!!isSignedIn && (
             <div className="flex justify-between gap-4">
               <SignOutButton>
-                <button className="rounded bg-purple-800 py-2 px-4 text-slate-100">
+                <button className="rounded bg-slate-500 py-2 px-4 text-slate-100">
                   Sign out
                 </button>
               </SignOutButton>
