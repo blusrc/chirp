@@ -1,10 +1,14 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
-import { SignIn, SignInButton, useUser, SignOutButton } from "@clerk/nextjs";
+import Image from "next/image";
+import { SignInButton, useUser, SignOutButton } from "@clerk/nextjs";
 
 import { RouterOutputs, api } from "~/utils/api";
-import { use } from "react";
+
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
 
 const CreatePostWizard = () => {
   const { user } = useUser();
@@ -15,10 +19,12 @@ const CreatePostWizard = () => {
 
   return (
     <div className="flex grow gap-4">
-      <img
+      <Image
         src={user.profileImageUrl}
         alt="profile image"
-        className="h-12 w-12 rounded-full border-2 border-slate-400"
+        className="h-12 w-12 rounded-full border border-slate-600"
+        width={56}
+        height={56}
       />
 
       {/* <span>{user.externalId} <br/> {user.id}</span> */}
@@ -35,17 +41,22 @@ const CreatePostWizard = () => {
 type PostWithUser = RouterOutputs["posts"]["getAll"][number];
 
 const PostView = (props: PostWithUser) => {
-  const { post, author} = props;
+  const { post, author } = props;
   return (
-    <div className="flex gap-3 m-2 bg-slate-700 rounded border-slate-100 py-4 px-3">
-      <img src={author.profilePicture} alt="profile pic" className="h-12 w-12 rounded-full border-2 border-slate-400"/>
+    <div className="m-2 flex gap-3 rounded border-slate-100 bg-slate-800 py-4 px-3">
+      <Image
+        src={author.profilePicture}
+        alt="profile pic"
+        className="h-12 w-12 rounded-full"
+        width={56}
+        height={56}
+      />
       <div className="flex flex-col gap-2">
         <div className="flex gap-2">
-          <span>{`@${author.username}`}</span>
+          <span className="text-slate-300">{`@${author.username}`}</span>
+          <span className="font-thin">{dayjs(post.createdAt).fromNow()}</span>
         </div>
-        <div>
-          {post.content}
-        </div>
+        <div>{post.content}</div>
       </div>
     </div>
   );
@@ -89,11 +100,9 @@ const Home: NextPage = () => {
             )}
           </div>
           <div className="flex flex-col">
-            {[...data, ...data]?.map(
-              (fullPost) => (
-                <PostView {...fullPost} key={fullPost.post.id} />
-              )
-            )}
+            {[...data, ...data]?.map((fullPost) => (
+              <PostView {...fullPost} key={fullPost.post.id} />
+            ))}
             {/* <div>Hello</div> */}
           </div>
         </div>

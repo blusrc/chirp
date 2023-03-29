@@ -1,7 +1,7 @@
 import type { User } from "@clerk/nextjs/dist/api";
 import { clerkClient } from "@clerk/nextjs/server";
 import { TRPCError } from "@trpc/server";
-import { z } from "zod";
+import { string, z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
@@ -50,7 +50,13 @@ export const postsRouter = createTRPCRouter({
       //   author.username = author.externalUsername;
       // }
 
-      return { post, author };
+      return {
+        post,
+        author: {
+          ...author,
+          username: author.username,
+        },
+      };
     });
   }),
 });
