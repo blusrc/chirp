@@ -12,17 +12,7 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 
-const filterUserForClient = (user: User) => {
-  return {
-    id: user.id,
-    username: user.username,
-    profilePicture: user.profileImageUrl,
-    externalUsername:
-      user.externalAccounts.find(
-        (externalAccount) => externalAccount.provider === "oauth_github"
-      )?.username || null,
-  };
-};
+import { filterUserForClient } from "~/server/helpers/filterUserForClients";
 
 // Create a new ratelimiter: 3 posts per minute
 const ratelimit = new Ratelimit({
@@ -78,7 +68,7 @@ export const postsRouter = createTRPCRouter({
   create: privateProcedure
     .input(
       z.object({
-        content: z.string().emoji().min(1).max(280),
+        content: z.string().emoji("Only emojis are allowed").min(1).max(280),
       })
     )
     .mutation(async ({ ctx, input }) => {
