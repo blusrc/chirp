@@ -3,7 +3,9 @@ import Head from "next/head";
 import Image from "next/image";
 import { SignInButton, useUser, SignOutButton } from "@clerk/nextjs";
 
-import { RouterOutputs, api } from "~/utils/api";
+import { api } from "~/utils/api";
+
+import type { RouterOutputs } from "~/utils/api";
 
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
