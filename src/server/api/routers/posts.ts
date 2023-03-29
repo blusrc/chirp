@@ -1,8 +1,8 @@
 import type { User } from "@clerk/nextjs/dist/api";
 import { clerkClient } from "@clerk/nextjs/server";
-import { contextProps } from "@trpc/react-query/shared";
+// import { contextProps } from "@trpc/react-query/shared";
 import { TRPCError } from "@trpc/server";
-import { string, z } from "zod";
+import { z } from "zod";
 
 import {
   createTRPCRouter,

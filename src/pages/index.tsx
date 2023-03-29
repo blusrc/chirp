@@ -125,12 +125,12 @@ const Home: NextPage = () => {
             )}
             {!!isSignedIn && (
               <div className="flex justify-between gap-4">
-                <CreatePostWizard />
-                {/* <SignOutButton>
+                <SignOutButton>
                   <button className="rounded bg-purple-800 py-2 px-4 text-slate-100">
                     Sign out
                   </button>
-                </SignOutButton> */}
+                </SignOutButton>
+                <CreatePostWizard />
               </div>
             )}
           </div>
