@@ -17,10 +17,10 @@ const filterUserForClient = (user: User) => {
     id: user.id,
     username: user.username,
     profilePicture: user.profileImageUrl,
-    // externalUsername:
-    //   user.externalAccounts.find(
-    //     (externalAccount) => externalAccount.provider === "oauth_github"
-    //   )?.username || null,
+    externalUsername:
+      user.externalAccounts.find(
+        (externalAccount) => externalAccount.provider === "oauth_github"
+      )?.username || null,
   };
 };
 
@@ -54,16 +54,16 @@ export const postsRouter = createTRPCRouter({
           message: `Author for post not found. POST ID: ${post.id}, USER ID: ${post.authorId}`,
         });
 
-      // if (!author.username) {
-      //   // user the ExternalUsername
-      //   if (!author.externalUsername) {
-      //     throw new TRPCError({
-      //       code: "INTERNAL_SERVER_ERROR",
-      //       message: `Author has no GitHub Account: ${author.id}`,
-      //     });
-      //   }
-      //   author.username = author.externalUsername;
-      // }
+      if (!author.username) {
+        // user the ExternalUsername
+        if (!author.externalUsername) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: `Author has no GitHub Account: ${author.id}`,
+          });
+        }
+        author.username = author.externalUsername;
+      }
 
       return {
         post,

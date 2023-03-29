@@ -9,7 +9,7 @@ import type { RouterOutputs } from "~/utils/api";
 
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { LoadingPage } from "~/components/loading";
+import { LoadingPage, LoadingSpinner } from "~/components/loading";
 import { useState } from "react";
 
 dayjs.extend(relativeTime);
@@ -48,14 +48,16 @@ const CreatePostWizard = () => {
         className="grow bg-transparent px-2"
         value={input}
         onChange={(e) => setInput(e.target.value)}
+        disabled={isPosting}
       />
-
-      <button
-        className="rounded bg-purple-800 py-2 px-4 text-slate-100"
-        onClick={() => mutate({ content: input })}
-      >
-        Chirp
-      </button>
+      {input !== "" && !isPosting && (
+        <button onClick={() => mutate({ content: input })}>Post</button>
+      )}
+      {isPosting && (
+        <div className="flex items-center justify-center">
+          <LoadingSpinner />
+        </div>
+      )}
     </div>
   );
 };
