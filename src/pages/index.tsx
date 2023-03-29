@@ -8,15 +8,25 @@ import { RouterOutputs, api } from "~/utils/api";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { LoadingPage } from "~/components/loading";
+import { useState } from "react";
 
 dayjs.extend(relativeTime);
 
 const CreatePostWizard = () => {
   const { user } = useUser();
 
+  const [input, setInput] = useState("");
+
   if (!user) return null;
 
-  console.log(user);
+  const ctx = api.useContext();
+
+  const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
+    onSuccess: () => {
+      setInput("");
+      void ctx.posts.getAll.invalidate();
+    },
+  });
 
   return (
     <div className="flex grow gap-4">
@@ -34,7 +44,16 @@ const CreatePostWizard = () => {
         type="text"
         placeholder="Type some emojis"
         className="grow bg-transparent px-2"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
       />
+
+      <button
+        className="rounded bg-purple-800 py-2 px-4 text-slate-100"
+        onClick={() => mutate({ content: input })}
+      >
+        Chirp
+      </button>
     </div>
   );
 };
@@ -57,7 +76,7 @@ const PostView = (props: PostWithUser) => {
           <span className="text-slate-300">{`@${author.username}`}</span>
           <span className="font-thin">{dayjs(post.createdAt).fromNow()}</span>
         </div>
-        <div>{post.content}</div>
+        <div className="text-xl">{post.content}</div>
       </div>
     </div>
   );
@@ -72,7 +91,7 @@ const Feed = () => {
 
   return (
     <div className="flex flex-col">
-      {[...data, ...data]?.map((fullPost) => (
+      {data.map((fullPost) => (
         <PostView {...fullPost} key={fullPost.post.id} />
       ))}
       {/* <div>Hello</div> */}
@@ -107,11 +126,11 @@ const Home: NextPage = () => {
             {!!isSignedIn && (
               <div className="flex justify-between gap-4">
                 <CreatePostWizard />
-                <SignOutButton>
+                {/* <SignOutButton>
                   <button className="rounded bg-purple-800 py-2 px-4 text-slate-100">
                     Sign out
                   </button>
-                </SignOutButton>
+                </SignOutButton> */}
               </div>
             )}
           </div>
