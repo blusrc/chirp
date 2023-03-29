@@ -14,6 +14,7 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
 import { PageLayout } from "~/components/pageLayout";
+import { PostView } from "~/components/postView";
 
 dayjs.extend(relativeTime);
 
@@ -81,35 +82,6 @@ const CreatePostWizard = () => {
           <LoadingSpinner />
         </div>
       )}
-    </div>
-  );
-};
-
-type PostWithUser = RouterOutputs["posts"]["getAll"][number];
-
-const PostView = (props: PostWithUser) => {
-  const { post, author } = props;
-  return (
-    <div className="m-2 flex gap-3 rounded border-slate-100 bg-slate-800 py-4 px-3">
-      <Image
-        src={author.profilePicture}
-        alt="profile pic"
-        className="h-12 w-12 rounded-full"
-        width={56}
-        height={56}
-      />
-      <div className="flex flex-col gap-2">
-        <div className="flex gap-2">
-          <Link href={`@${author.username}`}>
-            <span className="text-slate-300">{`@${author.username}`}</span>
-          </Link>
-          <span className="font-thin">{dayjs(post.createdAt).fromNow()}</span>
-        </div>
-
-        <Link href={`/post/${post.id}`}>
-          <div className="text-xl">{post.content}</div>
-        </Link>
-      </div>
     </div>
   );
 };

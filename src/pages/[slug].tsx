@@ -10,8 +10,27 @@ import superjson from "superjson";
 import { LoadingPage } from "~/components/loading";
 import { PageLayout } from "~/components/pageLayout";
 import Image from "next/image";
+import { PostView } from "~/components/postView";
 
 // type PageProps = InferGetStaticPropsType<typeof getStaticProps>;
+
+const ProfileFeed = (props: { userId: string }) => {
+  const { data, isLoading } = api.posts.getPostsByUserId.useQuery({
+    userId: props.userId,
+  });
+
+  if (isLoading) return <LoadingPage />;
+
+  if (!data || data.length === 0) return <div>User has not posted</div>;
+
+  return (
+    <div className="flex flex-col">
+      {data.map((fullPost) => (
+        <PostView {...fullPost} key={fullPost.post.id} />
+      ))}
+    </div>
+  );
+};
 
 const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
   const { data, isLoading } = api.profile.getUserByUsername.useQuery({
@@ -38,6 +57,7 @@ const ProfilePage: NextPage<{ username: string }> = ({ username }) => {
         <div className="mt-16 border-b-2 border-slate-400 px-4 py-4">
           <div className="text-2xl font-bold">{`@${username}`}</div>
         </div>
+        <ProfileFeed userId={data.id} />
       </PageLayout>
     </>
   );
